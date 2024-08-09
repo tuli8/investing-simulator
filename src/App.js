@@ -1,4 +1,5 @@
 import './App.css';
+import SidePanel from './modules/SidePanel';
 import {Line} from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -10,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
+import { useState } from 'react';
 
 ChartJS.register(
   CategoryScale,
@@ -21,29 +23,36 @@ ChartJS.register(
   Legend
 )
 
-const data = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-  datasets: [
-    {
-      label: "First dataset",
-      data: [33, 53, 85, 41, 44, 65],
-      fill: true,
-      backgroundColor: "rgba(75,192,192,0.2)",
-      borderColor: "rgba(75,192,192,1)"
-    },
-    {
-      label: "Second dataset",
-      data: [33, 25, 35, 51, 54, 76],
-      fill: false,
-      borderColor: "#742774"
-    }
-  ]
-}
+ChartJS.defaults.backgroundColor = '#9BD0F5';
+ChartJS.defaults.borderColor = '#36A2EB';
+ChartJS.defaults.color = '#000';
+
 
 function App() {
+  const [options, setOptions] = useState({
+    months: 12,
+    simulations: {
+      0: {
+        exponent: 1.5,
+        initial: 1000,
+      },
+    },
+  });
+  const data = {
+    labels: Array(options.months).fill(0).map((__, index) => `month ${index + 1}`),
+    datasets: Object.values(options.simulations).map((simulation, simulationIndex) => ({
+      label: `Simulation ${simulationIndex + 1}`,
+      data: Array(options.months).fill(0).map((__, index)=> simulation.initial * simulation.exponent ** index),
+      fill: true,
+    }))
+  }
+
   return (
     <div className="App">
-      <Line data={data} />
+      <div className='Chart'>
+        <Line data={data}/>
+      </div>
+      <SidePanel className='Side' options={options} setOptions={setOptions} />
     </div>
   );
 }

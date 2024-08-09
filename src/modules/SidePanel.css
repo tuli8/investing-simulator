@@ -1,0 +1,4 @@
+.SidePanel {
+    display: flex;
+    flex-direction: column;
+}
