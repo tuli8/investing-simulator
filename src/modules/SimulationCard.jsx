@@ -1,3 +1,4 @@
+import { Stack } from "@mui/material";
 import Input from "./Input";
 
 const inputs = [
@@ -14,11 +15,11 @@ const inputs = [
 ];
 
 const SimulationCard = ({options, setOptions}) => {
-    return <div>
+    return <Stack spacing={1}>
         {inputs.map(({title, optionsKey, type}) => (
             <Input title={title} value={options[optionsKey]} type={type} setValue={newValue => setOptions({...options, [optionsKey]:parseFloat(newValue)})} key={title}/>
         ))}
-    </div>
+    </Stack>
 }
 
 export default SimulationCard;

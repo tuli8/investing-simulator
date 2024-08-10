@@ -13,6 +13,7 @@ import {
   Filler,
 } from 'chart.js'
 import { useState } from 'react';
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 
 ChartJS.register(
   CategoryScale,
@@ -27,7 +28,7 @@ ChartJS.register(
 
 ChartJS.defaults.backgroundColor = '#9BD0F550';
 ChartJS.defaults.borderColor = '#36A2EB';
-ChartJS.defaults.color = getComputedStyle(document.body).getPropertyValue('--text-color');
+ChartJS.defaults.color = '#fff';
 ChartJS.defaults.elements.point.hitRadius = 15;
 ChartJS.defaults.elements.point.hoverRadius = 6;
 ChartJS.defaults.scales = {
@@ -36,7 +37,13 @@ ChartJS.defaults.scales = {
   },
 };
 
-function App() {
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
+
+const App = () => {
   const [options, setOptions] = useState({
     months: 12,
     simulations: {
@@ -57,10 +64,13 @@ function App() {
 
   return (
     <div className="App">
-      <div className='Chart'>
-        <Line data={data} />
-      </div>
-      <SidePanel className='Side' options={options} setOptions={setOptions} />
+      <ThemeProvider theme={darkTheme} >
+        <CssBaseline />
+        <div className='Chart'>
+          <Line data={data} />
+        </div>
+        <SidePanel className='Side' options={options} setOptions={setOptions} />
+      </ThemeProvider>
     </div>
   );
 }
