@@ -16,7 +16,7 @@ const inputs = [
 const SimulationCard = ({options, setOptions}) => {
     return <div>
         {inputs.map(({title, optionsKey, type}) => (
-            <Input title={title} value={options[optionsKey]} type={type} setValue={newValue => setOptions({...options, [optionsKey]:parseFloat(newValue)})} />
+            <Input title={title} value={options[optionsKey]} type={type} setValue={newValue => setOptions({...options, [optionsKey]:parseFloat(newValue)})} key={title}/>
         ))}
     </div>
 }
