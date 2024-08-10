@@ -6,5 +6,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #313131;
-  color: #f3f3f3;
+  --text-color: #f3f3f3;
+  color: var(--text-color);
 }

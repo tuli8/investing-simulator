@@ -10,6 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from 'chart.js'
 import { useState } from 'react';
 
@@ -20,19 +21,26 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler,
 )
 
-ChartJS.defaults.backgroundColor = '#9BD0F5';
+ChartJS.defaults.backgroundColor = '#9BD0F550';
 ChartJS.defaults.borderColor = '#36A2EB';
-ChartJS.defaults.color = '#000';
-
+ChartJS.defaults.color = getComputedStyle(document.body).getPropertyValue('--text-color');
+ChartJS.defaults.elements.point.hitRadius = 15;
+ChartJS.defaults.elements.point.hoverRadius = 6;
+ChartJS.defaults.scales = {
+  y: {
+    min:0,
+  },
+};
 
 function App() {
   const [options, setOptions] = useState({
     months: 12,
     simulations: {
-      0: {
+      1: {
         exponent: 1.5,
         initial: 1000,
       },
@@ -50,7 +58,7 @@ function App() {
   return (
     <div className="App">
       <div className='Chart'>
-        <Line data={data}/>
+        <Line data={data} />
       </div>
       <SidePanel className='Side' options={options} setOptions={setOptions} />
     </div>
