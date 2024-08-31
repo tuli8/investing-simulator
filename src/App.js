@@ -48,16 +48,18 @@ const App = () => {
     months: 12,
     simulations: {
       1: {
+        name: 'simulation 1',
         exponent: 1.5,
         initial: 1000,
+        monthlyInvestment: 0,
       },
     },
   });
   const data = {
     labels: Array(options.months).fill(0).map((__, index) => `month ${index + 1}`),
     datasets: Object.values(options.simulations).map((simulation, simulationIndex) => ({
-      label: `Simulation ${simulationIndex + 1}`,
-      data: Array(options.months).fill(0).map((__, index)=> simulation.initial * simulation.exponent ** index),
+      label: simulation.name,
+      data: Array(options.months).fill(0).map((__, index)=> Array(index).fill(0).reduce((prev,curr) => (prev + simulation.monthlyInvestment)* simulation.exponent, simulation.initial)),
       fill: true,
     }))
   }

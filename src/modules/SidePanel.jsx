@@ -18,10 +18,20 @@ const padding = css`
 
 const SidePanel = ({options, setOptions}) => {
 
-    const lastSimulationKey = Math.max(...Object.keys(options.simulations));
+    const simulationKeys = Object.keys(options.simulations);
+    const newSimulationKey = simulationKeys.length === 0 ? 1 : Math.max(...simulationKeys) + 1;
 
-    const addSimulation = () => {
-        setOptions({...options, simulations: {...options.simulations, [lastSimulationKey+1]:{initial:1000, exponent:1}}})
+    const addSimulation = () => {// TODO: make defaults come from parent
+        setOptions({...options, simulations: {...options.simulations, [newSimulationKey]:{
+            name: `simulation ${newSimulationKey}`, 
+            initial:1000, 
+            exponent:1, 
+            monthlyInvestment: 0,
+        }}});
+    }
+
+    const removeSimulation = (removedKey) => {
+        setOptions({...options, simulations: Object.entries(options.simulations).filter(entry => entry[0] !== removedKey).reduce((prev,curr)=> ({...prev, [curr[0]]:curr[1]}),{})});
     }
 
     return <div css={padding}>
@@ -34,7 +44,9 @@ const SidePanel = ({options, setOptions}) => {
             }
             {
                 Object.entries(options.simulations)?.map(((simulationEntry, index) => <SimulationCard options={simulationEntry[1]} key={simulationEntry[0]}
-                    setOptions={newOptions => setOptions({...options, simulations: {...options.simulations, [simulationEntry[0]]: newOptions}})}/>))
+                        setOptions={newOptions => setOptions({...options, simulations: {...options.simulations, [simulationEntry[0]]: newOptions}})}
+                        onRemove={() => removeSimulation(simulationEntry[0])}
+                    />))
             }
             <Button onClick={addSimulation} variant='outlined'>add simulation</Button>
         </Stack>
