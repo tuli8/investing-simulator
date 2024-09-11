@@ -12,8 +12,8 @@ import {
   Legend,
   Filler,
 } from 'chart.js'
-import { useState } from 'react';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import useLocalStorageState from './hooks/useLocalStorageState';
 
 ChartJS.register(
   CategoryScale,
@@ -44,7 +44,7 @@ const darkTheme = createTheme({
 });
 
 const App = () => {
-  const [options, setOptions] = useState({
+  const [options, setOptions] = useLocalStorageState({
     months: 12,
     simulations: {
       1: {
@@ -54,7 +54,7 @@ const App = () => {
         monthlyInvestment: 0,
       },
     },
-  });
+  }, 'simulationOptions');
   const data = {
     labels: Array(options.months).fill(0).map((__, index) => `month ${index + 1}`),
     datasets: Object.values(options.simulations).map((simulation, simulationIndex) => ({
