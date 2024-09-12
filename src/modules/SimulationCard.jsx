@@ -2,38 +2,10 @@ import { Button, Stack } from "@mui/material";
 import Input from "./Input";
 import YieldInput from './YieldInput';
 
-const inputs = [
-    {
-        title: 'name',
-        optionsKey: 'name',
-        type: 'text',
-    },
-    {
-        title: 'yield',
-        optionsKey: 'exponent',
-        type: 'yield',
-    },
-    {
-        title: 'initial value',
-        optionsKey: 'initial',
-        type: 'number',
-    },
-    {
-        title: 'monthly investment',
-        optionsKey: 'monthlyInvestment',
-        type: 'number',
-    },
-    {
-        title: 'monthly fee',
-        optionsKey: 'monthlyFee',
-        type: 'number',
-    }
-];
-
-const SimulationCard = ({options, setOptions, onRemove}) => {
+const SimulationCard = ({options, setOptions, onRemove, fields}) => {
     return <Stack spacing={1}>
         <Button onClick={onRemove}>remove</Button>
-        {inputs.map(({title, optionsKey, type}) => (
+        {fields.map(({title, optionsKey, type}) => (
             type==='yield'? (
                 <YieldInput title={title} value={options[optionsKey]} setValue={newValue => setOptions({...options, [optionsKey]:parseFloat(newValue)})} key={title}/>
             ) : (

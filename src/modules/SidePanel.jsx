@@ -16,7 +16,7 @@ const padding = css`
     padding: 1em;
 `;
 
-const SidePanel = ({options, setOptions, defaultSimulationOptions}) => {
+const SidePanel = ({options, setOptions, defaultSimulationOptions, simulationFields}) => {
 
     const simulationKeys = Object.keys(options.simulations);
     const newSimulationKey = simulationKeys.length === 0 ? 1 : Math.max(...simulationKeys) + 1;
@@ -41,6 +41,7 @@ const SidePanel = ({options, setOptions, defaultSimulationOptions}) => {
                 Object.entries(options.simulations)?.map(((simulationEntry, index) => <SimulationCard options={simulationEntry[1]} key={simulationEntry[0]}
                         setOptions={newOptions => setOptions({...options, simulations: {...options.simulations, [simulationEntry[0]]: newOptions}})}
                         onRemove={() => removeSimulation(simulationEntry[0])}
+                        fields={simulationFields}
                     />))
             }
             <Button onClick={addSimulation} variant='outlined'>add simulation</Button>

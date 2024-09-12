@@ -43,13 +43,46 @@ const darkTheme = createTheme({
   },
 });
 
-const defaultSimulationOptions = (simulationKey) => ({
-  name: `simulation ${simulationKey}`, 
-  initial:1000, 
-  exponent:1, 
-  monthlyInvestment: 0,
-  monthlyFee: 0,
-});
+const simulationFields = [
+  {
+      title: 'name',
+      optionsKey: 'name',
+      type: 'text',
+      default: simulationKey =>  `simulation ${simulationKey}`,
+  },
+  {
+      title: 'yield',
+      optionsKey: 'exponent',
+      type: 'yield',
+      default: 1,
+  },
+  {
+      title: 'initial value',
+      optionsKey: 'initial',
+      type: 'number',
+      default: 1000,
+  },
+  {
+      title: 'monthly investment',
+      optionsKey: 'monthlyInvestment',
+      type: 'number',
+      default: 0,
+  },
+  {
+      title: 'monthly fee',
+      optionsKey: 'monthlyFee',
+      type: 'number',
+      default: 0,
+  }
+];
+
+const defaultSimulationOptions = (simulationKey) => 
+  simulationFields
+    .map(field => ({
+      key: field.optionsKey,
+      value: (typeof field.default === 'function') ? field.default(simulationKey) : field.default,
+    }))
+    .reduce((prev, curr) => ({...prev, [curr.key]: curr.value}), {});
 
 const App = () => {
   const [options, setOptions] = useLocalStorageState({
@@ -76,7 +109,7 @@ const App = () => {
         <div className='Chart'>
           <Line data={data} />
         </div>
-        <SidePanel className='Side' options={options} setOptions={setOptions} defaultSimulationOptions={defaultSimulationOptions} />
+        <SidePanel className='Side' options={options} setOptions={setOptions} defaultSimulationOptions={defaultSimulationOptions} simulationFields={simulationFields}/>
       </ThemeProvider>
     </div>
   );
