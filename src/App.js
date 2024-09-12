@@ -43,23 +43,28 @@ const darkTheme = createTheme({
   },
 });
 
+const defaultSimulationOptions = (simulationKey) => ({
+  name: `simulation ${simulationKey}`, 
+  initial:1000, 
+  exponent:1, 
+  monthlyInvestment: 0,
+  monthlyFee: 0,
+});
+
 const App = () => {
   const [options, setOptions] = useLocalStorageState({
     months: 12,
     simulations: {
-      1: {
-        name: 'simulation 1',
-        exponent: 1.5,
-        initial: 1000,
-        monthlyInvestment: 0,
-      },
+      1: defaultSimulationOptions(1),
     },
   }, 'simulationOptions');
   const data = {
     labels: Array(options.months).fill(0).map((__, index) => `month ${index + 1}`),
     datasets: Object.values(options.simulations).map((simulation, simulationIndex) => ({
       label: simulation.name,
-      data: Array(options.months).fill(0).map((__, index)=> Array(index).fill(0).reduce((prev,curr) => (prev + simulation.monthlyInvestment)* simulation.exponent, simulation.initial)),
+      data: Array(options.months).fill(0).map((__, index)=> Array(index).fill(0).reduce((prev,curr) => 
+          (prev + simulation.monthlyInvestment)* simulation.exponent - simulation.monthlyFee, 
+        simulation.initial)),
       fill: true,
     }))
   }
@@ -71,7 +76,7 @@ const App = () => {
         <div className='Chart'>
           <Line data={data} />
         </div>
-        <SidePanel className='Side' options={options} setOptions={setOptions} />
+        <SidePanel className='Side' options={options} setOptions={setOptions} defaultSimulationOptions={defaultSimulationOptions} />
       </ThemeProvider>
     </div>
   );

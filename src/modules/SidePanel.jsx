@@ -16,18 +16,13 @@ const padding = css`
     padding: 1em;
 `;
 
-const SidePanel = ({options, setOptions}) => {
+const SidePanel = ({options, setOptions, defaultSimulationOptions}) => {
 
     const simulationKeys = Object.keys(options.simulations);
     const newSimulationKey = simulationKeys.length === 0 ? 1 : Math.max(...simulationKeys) + 1;
 
-    const addSimulation = () => {// TODO: make defaults come from parent
-        setOptions({...options, simulations: {...options.simulations, [newSimulationKey]:{
-            name: `simulation ${newSimulationKey}`, 
-            initial:1000, 
-            exponent:1, 
-            monthlyInvestment: 0,
-        }}});
+    const addSimulation = () => {
+        setOptions({...options, simulations: {...options.simulations, [newSimulationKey]: defaultSimulationOptions(newSimulationKey)}});
     }
 
     const removeSimulation = (removedKey) => {

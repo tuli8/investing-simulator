@@ -22,6 +22,11 @@ const inputs = [
         title: 'monthly investment',
         optionsKey: 'monthlyInvestment',
         type: 'number',
+    },
+    {
+        title: 'monthly fee',
+        optionsKey: 'monthlyFee',
+        type: 'number',
     }
 ];
 
