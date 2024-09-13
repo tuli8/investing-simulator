@@ -73,6 +73,15 @@ const simulationFields = [
       optionsKey: 'monthlyFee',
       type: 'number',
       default: 0,
+  },
+  {
+    title: 'buying/selling fees',
+    optionsKey: 'buySellFee',
+    type: 'percentageWithMinimum',
+    default: {
+      percentage: 0,
+      minimum: 0,
+    },
   }
 ];
 
@@ -84,6 +93,20 @@ const defaultSimulationOptions = (simulationKey) =>
     }))
     .reduce((prev, curr) => ({...prev, [curr.key]: curr.value}), {});
 
+const createSimulationData = (months, simulation) => {
+  const dataPoints = [simulation.initial];
+
+  for (let i = 1; i< months; i++) {
+    const previusMonth = dataPoints[i - 1];
+    const monthlyAddedValue = simulation.monthlyInvestment - simulation.monthlyFee;
+    const buyingFee = Math.max(simulation.buySellFee.percentage * monthlyAddedValue, monthlyAddedValue === 0 ? 0 : simulation.buySellFee.minimum);
+    const monthlyAddedValueAfterFees = monthlyAddedValue - buyingFee;
+    dataPoints.push((previusMonth + monthlyAddedValueAfterFees) * simulation.exponent);
+  }
+
+  return dataPoints;
+}
+
 const App = () => {
   const [options, setOptions] = useLocalStorageState({
     months: 12,
@@ -91,13 +114,12 @@ const App = () => {
       1: defaultSimulationOptions(1),
     },
   }, 'simulationOptions');
+
   const data = {
     labels: Array(options.months).fill(0).map((__, index) => `month ${index + 1}`),
     datasets: Object.values(options.simulations).map((simulation, simulationIndex) => ({
       label: simulation.name,
-      data: Array(options.months).fill(0).map((__, index)=> Array(index).fill(0).reduce((prev,curr) => 
-          (prev + simulation.monthlyInvestment)* simulation.exponent - simulation.monthlyFee, 
-        simulation.initial)),
+      data: createSimulationData(options.months, simulation),
       fill: true,
     }))
   }
