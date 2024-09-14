@@ -153,10 +153,12 @@ const App = () => {
       1: defaultSimulationOptions(1),
     },
   }, 'simulationOptions');
+  
+  const simulatedMonths = options.months + 1;
 
   const data = {
-    labels: Array(options.months).fill(0).map((__, index) => `month ${index + 1}`),
-    datasets: Object.values(options.simulations).map((simulation, simulationIndex) => createSimulationGraphs(options.months, simulation))
+    labels: Array(simulatedMonths).fill(0).map((__, index) => `month ${index + 1}`),
+    datasets: Object.values(options.simulations).map((simulation, simulationIndex) => createSimulationGraphs(simulatedMonths, simulation))
       .reduce((prev, curr) => [...prev, ...curr], []),
   }
 
