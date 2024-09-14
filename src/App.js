@@ -40,11 +40,16 @@ ChartJS.defaults.scales = {
 const OVERALL_INVESTMENT_GRAPH_BORDER_COLOR = '#36A23B';
 const OVERALL_INVESTMENT_GRAPH_BACKGROUND_COLOR = '#9BD06530';
 
+const WITHDRAWABLE_GRAPH_BORDER_COLOR = '#D65252';
+const WITHDRAWABLE_GRAPH_BACKGROUND_COLOR = '#DB706530';
+
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
 });
+
+const PROFITS_TAX = 0.25;
 
 const simulationFields = [
   {
@@ -126,6 +131,23 @@ const createOverallInvestmentSimulationData = (months, simulation) => (
   createSimulationData(months, {...simulation, monthlyFee: 0, buySellFee: {percentage: 0, minimum: 0}, exponent: 1})
 )
 
+const createWidthdrawableSimulationData = (months, simulation) => {
+  const simulationData = createSimulationData(months, simulation);
+  const overallInvestment = createOverallInvestmentSimulationData(months, simulation);
+
+  const withdrawableData = [];
+
+  for (let i = 0; i < simulationData.length; i++) {
+    const sellingAmount = simulationData[i];
+    const sellingFee = Math.max(simulation.buySellFee.percentage * sellingAmount, simulation.buySellFee.minimum);
+    const receivedAfterSell = sellingAmount - sellingFee;
+    const profit = Math.max(receivedAfterSell - overallInvestment[i], 0);
+    withdrawableData.push( receivedAfterSell - profit * PROFITS_TAX);
+  }
+
+  return withdrawableData;
+}
+
 const createSimulationGraphs = (months, simulation) => {
   const simulations = [{
     label: simulation.name,
@@ -140,6 +162,16 @@ const createSimulationGraphs = (months, simulation) => {
       fill: true,
       borderColor: OVERALL_INVESTMENT_GRAPH_BORDER_COLOR,
       backgroundColor: OVERALL_INVESTMENT_GRAPH_BACKGROUND_COLOR,
+    })
+  }
+
+  if (simulation.showWithdraw) {
+    simulations.push({
+      label: `${simulation.name} - withdrawable amount`,
+      data: createWidthdrawableSimulationData(months, simulation),
+      fill: true,
+      borderColor: WITHDRAWABLE_GRAPH_BORDER_COLOR,
+      backgroundColor: WITHDRAWABLE_GRAPH_BACKGROUND_COLOR,
     })
   }
 
