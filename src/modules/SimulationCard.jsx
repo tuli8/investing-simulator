@@ -1,8 +1,9 @@
 import React from "react";
-import { Button, Stack } from "@mui/material";
+import { Button, Checkbox, Stack } from "@mui/material";
 import Input from "./Input";
 import YieldInput from './YieldInput';
 import PercentageWithMinimum from './PercentageWithMinimum';
+import BooleanField from "./BooleanField";
 
 const getComponentType = (type) => {
     switch(type) {
@@ -10,6 +11,8 @@ const getComponentType = (type) => {
             return YieldInput;
         case 'percentageWithMinimum':
             return PercentageWithMinimum;
+        case 'boolean': 
+            return BooleanField;
         default:
             return Input;
     }

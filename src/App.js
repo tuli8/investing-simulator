@@ -37,6 +37,9 @@ ChartJS.defaults.scales = {
   },
 };
 
+const OVERALL_INVESTMENT_GRAPH_BORDER_COLOR = '#36A23B';
+const OVERALL_INVESTMENT_GRAPH_BACKGROUND_COLOR = '#9BD06550';
+
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -82,6 +85,18 @@ const simulationFields = [
       percentage: 0,
       minimum: 0,
     },
+  },
+  {
+    title: 'show overall investment',
+    optionsKey: 'showInvestment',
+    type: 'boolean',
+    default: false,
+  },
+  {
+    title: 'show withdraw amount',
+    optionsKey: 'showWithdraw',
+    type: 'boolean',
+    default: false,
   }
 ];
 
@@ -107,6 +122,30 @@ const createSimulationData = (months, simulation) => {
   return dataPoints;
 }
 
+const createOverallInvestmentSimulationData = (months, simulation) => (
+  createSimulationData(months, {...simulation, monthlyFee: 0, buySellFee: {percentage: 0, minimum: 0}, exponent: 1})
+)
+
+const createSimulationGraphs = (months, simulation) => {
+  const simulations = [{
+    label: simulation.name,
+    data: createSimulationData(months, simulation),
+    fill: true,
+  }];
+  
+  if (simulation.showInvestment) {
+    simulations.push({
+      label: `${simulation.name} - overall investments`,
+      data: createOverallInvestmentSimulationData(months, simulation),
+      fill: true,
+      borderColor: OVERALL_INVESTMENT_GRAPH_BORDER_COLOR,
+      backgroundColor: OVERALL_INVESTMENT_GRAPH_BACKGROUND_COLOR,
+    })
+  }
+
+  return simulations;
+}
+
 const App = () => {
   const [options, setOptions] = useLocalStorageState({
     months: 12,
@@ -117,11 +156,8 @@ const App = () => {
 
   const data = {
     labels: Array(options.months).fill(0).map((__, index) => `month ${index + 1}`),
-    datasets: Object.values(options.simulations).map((simulation, simulationIndex) => ({
-      label: simulation.name,
-      data: createSimulationData(options.months, simulation),
-      fill: true,
-    }))
+    datasets: Object.values(options.simulations).map((simulation, simulationIndex) => createSimulationGraphs(options.months, simulation))
+      .reduce((prev, curr) => [...prev, ...curr], []),
   }
 
   return (
