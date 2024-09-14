@@ -26,7 +26,7 @@ ChartJS.register(
   Filler,
 )
 
-ChartJS.defaults.backgroundColor = '#9BD0F550';
+ChartJS.defaults.backgroundColor = '#9BD0F530';
 ChartJS.defaults.borderColor = '#36A2EB';
 ChartJS.defaults.color = '#fff';
 ChartJS.defaults.elements.point.hitRadius = 15;
@@ -38,7 +38,7 @@ ChartJS.defaults.scales = {
 };
 
 const OVERALL_INVESTMENT_GRAPH_BORDER_COLOR = '#36A23B';
-const OVERALL_INVESTMENT_GRAPH_BACKGROUND_COLOR = '#9BD06550';
+const OVERALL_INVESTMENT_GRAPH_BACKGROUND_COLOR = '#9BD06530';
 
 const darkTheme = createTheme({
   palette: {
