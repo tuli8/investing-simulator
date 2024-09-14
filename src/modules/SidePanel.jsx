@@ -4,6 +4,8 @@ import Input from "./Input";
 import SimulationCard from "./SimulationCard";
 import { Button, Stack } from "@mui/material";
 
+// TODO: extract the options to the top level and do something similar to the simulation fields.
+// TODO: add options such as to display only years, make the months simulated a dual input so you can enter years
 const overallOptions = [
     {
         title: 'months simulated',

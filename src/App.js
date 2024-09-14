@@ -141,7 +141,7 @@ const createWidthdrawableSimulationData = (months, simulation) => {
     const sellingAmount = simulationData[i];
     const sellingFee = Math.max(simulation.buySellFee.percentage * sellingAmount, simulation.buySellFee.minimum);
     const receivedAfterSell = sellingAmount - sellingFee;
-    const profit = Math.max(receivedAfterSell - overallInvestment[i], 0);
+    const profit = Math.max(receivedAfterSell - overallInvestment[i], 0);// TODO: reassure selling calculation, check which tax is taken first
     withdrawableData.push( receivedAfterSell - profit * PROFITS_TAX);
   }
 

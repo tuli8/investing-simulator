@@ -3,6 +3,7 @@ import Input from "./Input";
 
 const MONTHS_IN_YEAR = 12;
 
+// TODO: make a dual input component with transformations from one field to the other and make them editable freely until confirmed.
 const YieldInput = ({title, value, setValue}) => {
     const toMonthly = (annualy) => annualy ** (1/MONTHS_IN_YEAR);
     const toAnnualy = (monthly) => monthly ** MONTHS_IN_YEAR;

@@ -5,6 +5,7 @@ import YieldInput from './YieldInput';
 import PercentageWithMinimum from './PercentageWithMinimum';
 import BooleanField from "./BooleanField";
 
+// TODO: extract component and parsing to the top level field declaration
 const getComponentType = (type) => {
     switch(type) {
         case 'yield':
