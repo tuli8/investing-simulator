@@ -1,5 +1,4 @@
-import { Stack } from "@mui/material";
-import Input from "./Input";
+import MultipleConnectedInput from "./MultipleConnectedInput";
 
 const MONTHS_IN_YEAR = 12;
 
@@ -9,23 +8,22 @@ const YieldInput = ({title, value, setValue}) => {
     const toAnnualy = (monthly) => monthly ** MONTHS_IN_YEAR;
     const format = (number) => number.toFixed(3);
 
-    const monthly = format(value);
-    const annualy = format(toAnnualy(value));
-
-    const setMonthly = (newMonthly) => {
-        setValue(newMonthly);
-    }
-
-    const setAnnualy = (newAnnualy) => {
-        setValue(toMonthly(newAnnualy));
-    }
-
-    // TODO: style better
-    return <Stack direction={'row'} >
-        {title}
-        <Input title={'monthly'} value={monthly} type={'number'} setValue={setMonthly} />
-        <Input title={'annualy'} value={annualy} type={'number'} setValue={setAnnualy} /> 
-    </Stack>
+    return <MultipleConnectedInput title={title} value={value} setValue={setValue} inputs={[
+        {
+            title: 'monthly',
+            key: 'monthly',
+            type: 'number',
+            fromValue: value => format(value),
+            toValue: value => value,
+        },
+        {
+            title: 'annually',
+            key: 'annually',
+            type: 'number',
+            fromValue: value => format(toAnnualy(value)),
+            toValue: value => toMonthly(value),
+        }
+    ]}/>
 }
 
 export default YieldInput;
