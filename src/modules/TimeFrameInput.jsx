@@ -3,7 +3,7 @@ import MultipleConnectedInput from "./MultipleConnectedInput";
 const MONTHS_IN_YEAR = 12;
 
 const TimeFrameInput = ({title, value, setValue}) => {
-    const toMonths = years => years * MONTHS_IN_YEAR;
+    const toMonths = years => Math.floor(years * MONTHS_IN_YEAR);
     const toYears = months => months / MONTHS_IN_YEAR;
     const format = (number) => number.toFixed(3);
 
