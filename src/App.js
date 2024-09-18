@@ -51,6 +51,16 @@ const darkTheme = createTheme({
 
 const PROFITS_TAX = 0.25;
 
+// TODO: add options such as to display only years
+const overallOptions = [
+  {
+      title: 'months simulated',
+      optionsKey: 'months',
+      type: 'timeFrame',
+      default: 12,
+  },
+];
+
 const simulationFields = [
   {
       title: 'name',
@@ -105,13 +115,18 @@ const simulationFields = [
   }
 ];
 
-const defaultSimulationOptions = (simulationKey) => 
-  simulationFields
+const getDefault = (field, ...additionalParams) => (typeof field.default === 'function') ? field.default(...additionalParams) : field.default;
+
+const createDefaultFromFieldDefinitionList = (settingsList, ...additionalParams) =>
+  settingsList
     .map(field => ({
       key: field.optionsKey,
-      value: (typeof field.default === 'function') ? field.default(simulationKey) : field.default,
+      value: getDefault(field, ...additionalParams),
     }))
     .reduce((prev, curr) => ({...prev, [curr.key]: curr.value}), {});
+
+const defaultSimulationOptions = (simulationKey) => createDefaultFromFieldDefinitionList(simulationFields, simulationKey);
+const defaultOptions = () => createDefaultFromFieldDefinitionList(overallOptions);
 
 const createSimulationData = (months, simulation) => {
   const dataPoints = [simulation.initial];
@@ -180,7 +195,7 @@ const createSimulationGraphs = (months, simulation) => {
 
 const App = () => {
   const [options, setOptions] = useLocalStorageState({
-    months: 12,
+    ...defaultOptions(),
     simulations: {
       1: defaultSimulationOptions(1),
     },
@@ -201,7 +216,8 @@ const App = () => {
         <div className='Chart'>
           <Line data={data} />
         </div>
-        <SidePanel className='Side' options={options} setOptions={setOptions} defaultSimulationOptions={defaultSimulationOptions} simulationFields={simulationFields}/>
+        <SidePanel className='Side' options={options} setOptions={setOptions} defaultSimulationOptions={defaultSimulationOptions} 
+          overallOptions={overallOptions} simulationFields={simulationFields}/>
       </ThemeProvider>
     </div>
   );
