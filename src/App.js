@@ -14,6 +14,8 @@ import {
 } from 'chart.js'
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import useLocalStorageState from './hooks/useLocalStorageState';
+import {activateIfFunction} from './utils';
+
 
 ChartJS.register(
   CategoryScale,
@@ -115,7 +117,7 @@ const simulationFields = [
   }
 ];
 
-const getDefault = (field, ...additionalParams) => (typeof field.default === 'function') ? field.default(...additionalParams) : field.default;
+const getDefault = (field, ...additionalParams) => activateIfFunction(field.default, ...additionalParams);
 
 const createDefaultFromFieldDefinitionList = (settingsList, ...additionalParams) =>
   settingsList

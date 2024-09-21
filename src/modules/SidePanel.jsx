@@ -4,6 +4,7 @@ import Input from "./Input";
 import SimulationCard from "./SimulationCard";
 import { Button, Stack } from "@mui/material";
 import GenericInput from './GenericInput';
+import { activateIfFunction } from '../utils';
 
 const padding = css`
     padding: 1em;
@@ -22,10 +23,10 @@ const SidePanel = ({options, setOptions, defaultSimulationOptions, overallOption
         setOptions(options => ({...options, simulations: Object.entries(options.simulations).filter(entry => entry[0] !== removedKey).reduce((prev,curr)=> ({...prev, [curr[0]]:curr[1]}),{})}));
     }
 
-    const setSimulationOptions = simulationEntry => newOptionsCallback => {
+    const setSimulationOptions = simulationEntry => newOptions => {
         setOptions(oldOpttions => {
             const simulationKey = simulationEntry[0];
-            const newOptionsValue = newOptionsCallback(oldOpttions.simulations[simulationKey]);
+            const newOptionsValue = activateIfFunction(newOptions, oldOpttions.simulations[simulationKey]);
             
             return ({...oldOpttions, simulations: {...oldOpttions.simulations, [simulationKey]: newOptionsValue}})
         })
