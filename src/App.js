@@ -130,13 +130,18 @@ const createDefaultFromFieldDefinitionList = (settingsList, ...additionalParams)
 const defaultSimulationOptions = (simulationKey) => createDefaultFromFieldDefinitionList(simulationFields, simulationKey);
 const defaultOptions = () => createDefaultFromFieldDefinitionList(overallOptions);
 
+const calculateBuyingFee = (buyingAmount, buySellFee) => 
+  Math.max(buyingAmount * buySellFee.percentage, buyingAmount === 0 ? 0 : buySellFee.minimum);
+
 const createSimulationData = (months, simulation) => {
   const dataPoints = [simulation.initial];
+  const buyingFee = calculateBuyingFee(dataPoints[0], simulation.buySellFee);
+  dataPoints[0] -=  buyingFee;
 
   for (let i = 1; i< months; i++) {
     const previusMonth = dataPoints[i - 1];
     const monthlyAddedValue = simulation.monthlyInvestment - simulation.monthlyFee;
-    const buyingFee = Math.max(simulation.buySellFee.percentage * monthlyAddedValue, monthlyAddedValue === 0 ? 0 : simulation.buySellFee.minimum);
+    const buyingFee = calculateBuyingFee(monthlyAddedValue, simulation.buySellFee);
     const monthlyAddedValueAfterFees = monthlyAddedValue - buyingFee;
     dataPoints.push((previusMonth + monthlyAddedValueAfterFees) * simulation.exponent);
   }
