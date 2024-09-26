@@ -1,5 +1,9 @@
 # Investing Simulator
 
+## Usage
+
+This simulator may not be accurate and should not be used as an advice or as a suggestion for investing or any other action.
+
 ## Available Scripts
 
 In the project directory, you can run:
