@@ -94,7 +94,7 @@ const simulationFields = [
       type: 'number',
       default: 0,
   },
-  {
+  {//make it offset to the monthly fee
     title: 'buying/selling fees',
     optionsKey: 'buySellFee',
     type: 'percentageWithMinimum',
