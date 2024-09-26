@@ -15,6 +15,7 @@ import {
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import useLocalStorageState from './hooks/useLocalStorageState';
 import {activateIfFunction} from './utils';
+import OneTimeAlert from './modules/OneTimeAlert';
 
 
 ChartJS.register(
@@ -220,6 +221,9 @@ const App = () => {
     <div className="App">
       <ThemeProvider theme={darkTheme} >
         <CssBaseline />
+        <OneTimeAlert > 
+          This simulator may not be accurate and should not be used as an advice or as a suggestion for investing or any other action.
+        </OneTimeAlert>
         <div className='Chart'>
           <Line data={data} />
         </div>
